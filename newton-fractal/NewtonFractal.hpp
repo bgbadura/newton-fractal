@@ -9,4 +9,3 @@ class NewtonFractal {
 
     auto calculateComplexRoots() -> void;
 };
-
