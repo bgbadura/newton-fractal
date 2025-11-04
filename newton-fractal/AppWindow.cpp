@@ -2,7 +2,7 @@
 #include "NewtonFractal.hpp"
 
 auto drawWindow() -> void {
-    auto newtonFractal = NewtonFractal(3);
+    auto newtonFractal = NewtonFractal(5);
     newtonFractal.calculateComplexRoots();
 
     auto window = sf::RenderWindow(

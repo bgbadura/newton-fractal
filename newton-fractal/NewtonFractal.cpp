@@ -6,16 +6,8 @@
 #include <iostream>
 
 // window size
-const double WINDOW_WIDTH = 800;
-const double WINDOW_HEIGHT = 600;
-
-// Image for pixel-by-pixel drawing
-sf::Image image = sf::Image();
-sf::Texture texture = sf::Texture();
-sf::Sprite sprite = sf::Sprite();
-
-// the n parameter modified in the command line or in GUI
-int n;
+//const double WINDOW_WIDTH = 800;
+//const double WINDOW_HEIGHT = 600;
 
 // limits of visible plane
 const int MIN_RE = -2;
@@ -23,11 +15,6 @@ const int MAX_RE = 2;
 const int MIN_IM = -2;
 const int MAX_IM = 2;
 
-// the complex number
-std::complex<double> z = std::complex<double>();
-
-// roots of the equation z^n - 1 = 0:
-std::vector<std::complex<double>> roots = std::vector<std::complex<double>>();
 
 NewtonFractal::NewtonFractal(int n) : n(n) {
     image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color(0, 0, 0));
@@ -50,12 +37,7 @@ auto NewtonFractal::calculateComplexRoots() -> void {
     }
 }
 
-auto NewtonFractal::getImage() -> sf::Image& {
-    return image;
-}
 
 auto NewtonFractal::getSprite() -> sf::Sprite& {
     return sprite;
 }
-
-

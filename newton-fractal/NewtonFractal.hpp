@@ -9,11 +9,10 @@ public:
 
     auto calculateComplexRoots() -> void;
 
-    auto getImage() -> sf::Image &;
-
     auto getSprite() -> sf::Sprite &;
 
 private:
+    // window size
     const double WINDOW_WIDTH = 800;
     const double WINDOW_HEIGHT = 600;
 
