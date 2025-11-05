@@ -17,7 +17,7 @@ auto drawWindow(const double WINDOW_WIDTH, const double WINDOW_HEIGHT) -> void {
     newtonFractal.calculateComplexRoots();
     newtonFractal.generateFractal(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    // Main loop
+    // main loop
     while (window.isOpen()) {
         auto event = sf::Event();
 

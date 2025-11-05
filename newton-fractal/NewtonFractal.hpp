@@ -8,6 +8,8 @@ public:
     NewtonFractal(int n);
 
     auto calculateComplexRoots() -> void;
+    auto convertHslToRgb(double h, double s, double v) -> sf::Color;
+    auto iterate(double x, double y, std::complex<double> z) -> std::complex<double>;
     auto generateFractal(double windowWidth, double windowHeight) -> void;
 
     auto getSprite() -> sf::Sprite&;
@@ -28,9 +30,15 @@ private:
     const double MIN_IM = -2;
     const double MAX_IM = 2;
 
+    // determine if a result is close to a root of the equation
+    const double DELTA = 0.0001;
+
     // the complex number
     std::complex<double> z;
 
     // roots of the equation z^n - 1 = 0:
     std::vector<std::complex<double>> roots;
+
+    // colours assigned to each root
+    std::map<std::complex<double>, sf::Color> rootColours;
 };
