@@ -9,18 +9,11 @@
 //const double WINDOW_WIDTH = 800;
 //const double WINDOW_HEIGHT = 600;
 
-// limits of visible plane
-const int MIN_RE = -2;
-const int MAX_RE = 2;
-const int MIN_IM = -2;
-const int MAX_IM = 2;
-
-
 NewtonFractal::NewtonFractal(int n) : n(n) {
     // load an initial color (for testing) - works!
-    image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color(255, 0, 0));
-    texture.loadFromImage(image);
-    sprite.setTexture(texture);
+    // image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color(255, 0, 0));
+    // texture.loadFromImage(image);
+    // sprite.setTexture(texture);
 }
 
 auto NewtonFractal::calculateComplexRoots() -> void {
@@ -38,16 +31,21 @@ auto NewtonFractal::calculateComplexRoots() -> void {
     }
 }
 
-auto NewtonFractal::generateFractal() -> void {
-    std::cout << "Complex plane: from" << MIN_RE << "; " << MIN_IM << " to " << MAX_RE << "; " << MAX_IM << '\n';
+auto NewtonFractal::generateFractal(double WINDOW_WIDTH, double WINDOW_HEIGHT) -> void {
+    // load an initial color (for testing) - works!
+    image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color(255, 0, 0));
+    texture.loadFromImage(image);
+    sprite.setTexture(texture);
+
+    std::cout << "Complex plane: from " << MIN_RE << ";" << MIN_IM << " to " << MAX_RE << ";" << MAX_IM << '\n';
 
     // for each pixel (going first by columns, then by individual pixels of a row)
     for (int y = 0; y < image.getSize().y; y++) {
         for (int x = 0; x < image.getSize().x; x++) {
             // map a pixel (x,y) to a complex number: reZ and imZ
             auto complex = std::complex<double>(
-                MIN_RE + x/(MAX_RE-MIN_RE),
-                MIN_IM + y/(MAX_IM-MIN_IM)
+                MIN_RE + ((x / WINDOW_WIDTH) * (MAX_RE-MIN_RE)),
+                MAX_IM - ((y / WINDOW_HEIGHT) * (MAX_IM-MIN_IM))
             );
             std::cout<< "Complex number for pixel (" << x << "; " << y << ") is "
                 << complex.real() << " ; " << complex.imag() << "i\n";

@@ -8,16 +8,12 @@ public:
     NewtonFractal(int n);
 
     auto calculateComplexRoots() -> void;
-    auto generateFractal() -> void;
+    auto generateFractal(double windowWidth, double windowHeight) -> void;
 
     auto getSprite() -> sf::Sprite&;
     auto getImage() -> sf::Image&;
 
 private:
-    // window size
-    const double WINDOW_WIDTH = 800;
-    const double WINDOW_HEIGHT = 600;
-
     // Image for pixel-by-pixel drawing
     sf::Image image = sf::Image();
     sf::Texture texture = sf::Texture();
@@ -27,10 +23,10 @@ private:
     int n;
 
     // limits of visible plane
-    const int MIN_RE = -2;
-    const int MAX_RE = 2;
-    const int MIN_IM = -2;
-    const int MAX_IM = 2;
+    const double MIN_RE = -2;
+    const double MAX_RE = 2;
+    const double MIN_IM = -2;
+    const double MAX_IM = 2;
 
     // the complex number
     std::complex<double> z;

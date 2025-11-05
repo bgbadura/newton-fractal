@@ -1,5 +1,5 @@
 #include "AppWindow.hpp"
 
 auto main() -> int {
-    drawWindow();
+    drawWindow(800, 600);
 }
