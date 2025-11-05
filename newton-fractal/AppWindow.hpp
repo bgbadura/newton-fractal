@@ -1,3 +1,3 @@
 #pragma once
 
-auto drawWindow(double WINDOW_WIDTH, double WINDOW_HEIGHT) -> void;
+auto drawWindow(int n, double WINDOW_WIDTH, double WINDOW_HEIGHT) -> void;

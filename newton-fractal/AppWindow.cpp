@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "NewtonFractal.hpp"
 
-auto drawWindow(const double WINDOW_WIDTH, const double WINDOW_HEIGHT) -> void {
+auto drawWindow(int n, const double WINDOW_WIDTH, const double WINDOW_HEIGHT) -> void {
 
     auto window = sf::RenderWindow(
             sf::VideoMode(800,
@@ -13,8 +13,9 @@ auto drawWindow(const double WINDOW_WIDTH, const double WINDOW_HEIGHT) -> void {
     window.setFramerateLimit(60);
 
     // initialize generation of the fractal
-    auto newtonFractal = NewtonFractal(3);
+    auto newtonFractal = NewtonFractal(n);
     newtonFractal.calculateComplexRoots();
+    newtonFractal.assignColourToNewtonRoot();
     newtonFractal.generateFractal(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // main loop

@@ -65,6 +65,20 @@ auto NewtonFractal::convertHslToRgb(double h, double s, double v) -> sf::Color {
     );
 }
 
+auto NewtonFractal::assignColourToNewtonRoot() -> void {
+    rootColours.clear();
+
+    for (int i = 0; i < roots.size(); i++) {
+        auto hue = i * 360.0 / roots.size();
+        auto convertedColour = convertHslToRgb(hue, 1.0, 1.0);
+
+        rootColours.push_back(convertedColour);
+
+        std::cout << "Root " << i << " (Hue: " << hue << ") -> RGB: "
+            << (int)convertedColour.r << "; " << (int)convertedColour.g << "; " << (int)convertedColour.b << '\n';
+    }
+}
+
 auto NewtonFractal::iterate(double x, double y, std::complex<double> z) -> std::complex<double> {
     // Newton's fractal formula:    z_{k+1} = z_k - [ f(z_k) / f'(z_k) ]
     // value at point z:            f(z) = z^n - 1
@@ -81,6 +95,8 @@ auto NewtonFractal::iterate(double x, double y, std::complex<double> z) -> std::
             // image.setPixel(x, y, sf::Color())
         }
     }
+    // placeholder
+    return {0.0, 0.0};
 }
 
 auto NewtonFractal::generateFractal(double WINDOW_WIDTH, double WINDOW_HEIGHT) -> void {
