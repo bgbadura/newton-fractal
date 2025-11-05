@@ -2,8 +2,10 @@
 #include "NewtonFractal.hpp"
 
 auto drawWindow() -> void {
-    auto newtonFractal = NewtonFractal(5);
+    // initialize generation of the fractal
+    auto newtonFractal = NewtonFractal(3);
     newtonFractal.calculateComplexRoots();
+    newtonFractal.generateFractal();
 
     auto window = sf::RenderWindow(
             sf::VideoMode(800,

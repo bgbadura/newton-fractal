@@ -8,8 +8,10 @@ public:
     NewtonFractal(int n);
 
     auto calculateComplexRoots() -> void;
+    auto generateFractal() -> void;
 
-    auto getSprite() -> sf::Sprite &;
+    auto getSprite() -> sf::Sprite&;
+    auto getImage() -> sf::Image&;
 
 private:
     // window size
