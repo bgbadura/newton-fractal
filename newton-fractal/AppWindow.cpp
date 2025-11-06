@@ -3,8 +3,8 @@
 
 auto drawWindow(int n, int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void {
     auto window = sf::RenderWindow(
-            sf::VideoMode(800,
-                           600),
+            sf::VideoMode(WINDOW_WIDTH,
+                           WINDOW_HEIGHT),
             "Newton Fractal",
             sf::Style::Default,
             sf::ContextSettings(0, 0, 8)
