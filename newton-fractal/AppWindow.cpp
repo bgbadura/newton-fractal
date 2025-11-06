@@ -1,8 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "NewtonFractal.hpp"
 
-auto drawWindow(int n, const double WINDOW_WIDTH, const double WINDOW_HEIGHT) -> void {
-
+auto drawWindow(int n, int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void {
     auto window = sf::RenderWindow(
             sf::VideoMode(800,
                            600),

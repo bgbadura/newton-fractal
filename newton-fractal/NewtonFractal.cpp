@@ -94,7 +94,7 @@ auto NewtonFractal::findPixelColour(std::complex<double> z_start) -> sf::Color {
                 // "the color of the point is determined by which root is reached (hue),
                 // and how many iterations it took (brightness)" - brightness is "value" in HSV
                 auto v = (1.0 - static_cast<double>(i) / MAX_ITER) * 0.9;
-                auto baseHue = rootColours[k]; // base colour of the closest root
+                auto baseHue = (360 / static_cast<int>(roots.size())) * k; // base colour of the closest root
                 return convertHslToRgb(baseHue, 1.0, v);
             }
         }
@@ -112,7 +112,6 @@ auto NewtonFractal::findPixelColour(std::complex<double> z_start) -> sf::Color {
 }
 
 auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void {
-    // load an initial color (for testing) - works!
     image.create(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     std::cout << "Complex plane: from " << MIN_RE << ";" << MIN_IM << " to " << MAX_RE << ";" << MAX_IM << '\n';
@@ -128,12 +127,10 @@ auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void
             std::cout<< "Complex number for pixel (" << x << "; " << y << ") is "
                 << complex.real() << " ; " << complex.imag() << "i\n";
 
-
             sf::Color pixelColour = findPixelColour(complex);
             image.setPixel(x, y, pixelColour);
         }
     }
-
     texture.loadFromImage(image);
     sprite.setTexture(texture);
 }
