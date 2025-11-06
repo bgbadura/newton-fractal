@@ -16,10 +16,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SFML)
 
 add_executable(newton_fractal
-        main.cpp
-        AppWindow.cpp
-        AppWindow.hpp
-        NewtonFractal.cpp
-        NewtonFractal.hpp
+        src/main.cpp
+        src/AppWindow.cpp
+        src/AppWindow.hpp
+        src/NewtonFractal.cpp
+        src/NewtonFractal.hpp
 )
 target_link_libraries(newton_fractal sfml-graphics)
