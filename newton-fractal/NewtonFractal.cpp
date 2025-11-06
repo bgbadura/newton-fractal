@@ -35,33 +35,24 @@ auto NewtonFractal::convertHslToRgb(double h, double s, double v) -> sf::Color {
     auto hPrim = h / 60.0;
     auto x = c * (1 - abs((int)hPrim % 2 - 1));
 
-    auto tempColour = sf::Color::Black;
-    if (hPrim >= 0 && hPrim < 1) {
-        tempColour = sf::Color(c, x, 0);
-    }
-    else if (hPrim >= 1 && hPrim < 2) {
-        tempColour = sf::Color(x, c, 0);
-    }
-    else if (hPrim >= 2 && hPrim < 3) {
-        tempColour = sf::Color(0, c, x);
-    }
-    else if (hPrim >= 3 && hPrim < 4) {
-        tempColour = sf::Color(0, x, c);
-    }
-    else if (hPrim >= 4 && hPrim < 5) {
-        tempColour = sf::Color(x, 0, c);
-    }
-    else if (hPrim >= 5 && hPrim < 6) {
-        tempColour = sf::Color(c, 0, x);
-    }
+    auto r = 0;
+    auto g = 0;
+    auto b = 0;
+
+    if (hPrim >= 0 && hPrim < 1)      { r = c; g = x; b = 0; }
+    else if (hPrim >= 1 && hPrim < 2) { r = x; g = c; b = 0; }
+    else if (hPrim >= 2 && hPrim < 3) { r = 0; g = c; b = x; }
+    else if (hPrim >= 3 && hPrim < 4) { r = 0; g = x; b = c; }
+    else if (hPrim >= 4 && hPrim < 5) { r = x; g = 0; b = c; }
+    else if (hPrim >= 5 && hPrim < 6) { r = c; g = 0; b = x; }
 
     auto m = v - c;
 
-    // final RGB result
+    // final RGB result (scaled from [0;1] to [0;255]
     return sf::Color(
-        tempColour.r + m,
-        tempColour.g + m,
-        tempColour.b + m
+        (int)((r + m) * 255),
+        (int)((g + m) * 255),
+        (int)((b + m) * 255)
     );
 }
 
@@ -79,7 +70,7 @@ auto NewtonFractal::assignColourToNewtonRoot() -> void {
     }
 }
 
-auto NewtonFractal::iterate(double x, double y, std::complex<double> z) -> std::complex<double> {
+auto NewtonFractal::iterate(std::complex<double> z_start) -> sf::Color {
     // Newton's fractal formula:    z_{k+1} = z_k - [ f(z_k) / f'(z_k) ]
     // value at point z:            f(z) = z^n - 1
     // derivative at point z:       f'(z) = n * z^(n-1)
