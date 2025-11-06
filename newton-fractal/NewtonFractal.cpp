@@ -21,10 +21,6 @@ auto NewtonFractal::calculateComplexRoots() -> void {
                 std::sin((2 * std::numbers::pi * k) / n)
         );
         roots.push_back(root);
-
-        // test
-        // std::cout << "Equation: z^" << n << " - 1 = 0" << '\n';
-        // std::cout << "z_" << k << " = " << root << '\n';
     }
 }
 
@@ -69,11 +65,6 @@ auto NewtonFractal::assignColourToNewtonRoot() -> void {
         auto convertedColour = convertHslToRgb(hue, 1.0, 1.0);
 
         rootColours.push_back(convertedColour);
-
-        // std::cout << "Root " << i << " (Hue: " << hue << ") -> RGB: "
-        //     << static_cast<int>(convertedColour.r) << "; "
-        //     << static_cast<int>(convertedColour.g) << "; "
-        //     << static_cast<int>(convertedColour.b) << '\n';
     }
 }
 
@@ -121,8 +112,6 @@ auto NewtonFractal::findPixelColour(std::complex<double> z_start) -> sf::Color {
 auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void {
     image.create(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    // std::cout << "Complex plane: from " << MIN_RE << ";" << MIN_IM << " to " << MAX_RE << ";" << MAX_IM << '\n';
-
     // for each pixel (going first by columns, then by individual pixels of a row)
     for (int y = 0; y < image.getSize().y; y++) {
         for (int x = 0; x < image.getSize().x; x++) {
@@ -131,8 +120,6 @@ auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void
                 MIN_RE + ((static_cast<double>(x) / WINDOW_WIDTH) * (MAX_RE-MIN_RE)),
                 MAX_IM - ((static_cast<double>(y) / WINDOW_HEIGHT) * (MAX_IM-MIN_IM))
             );
-            // std::cout<< "Complex number for pixel (" << x << "; " << y << ") is "
-            //     << complex.real() << " ; " << complex.imag() << "i\n";
 
             sf::Color pixelColour = findPixelColour(complex);
             image.setPixel(x, y, pixelColour);
