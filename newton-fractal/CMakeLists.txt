@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
-project(newton_fractal)
+project(newton_fractal LANGUAGES CXX ISPC)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(BUILD_SHARED_LIBS FALSE)
+set(CMAKE_ISPC_TARGET_ARCHITECTURE "host")
 
 include(FetchContent)
 
@@ -21,5 +22,17 @@ add_executable(newton_fractal
         src/AppWindow.hpp
         src/NewtonFractal.cpp
         src/NewtonFractal.hpp
+        kernel/Fractal.ispc
 )
-target_link_libraries(newton_fractal sfml-graphics)
+
+set_source_files_properties(kernel/fractal.ispc PROPERTIES
+        ISPC_HEADER_FILE "${CMAKE_CURRENT_BINARY_DIR}/fractal_ispc.h"
+)
+
+target_include_directories(NewtonFractal PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+target_link_libraries(newton_fractal PRIVATE
+        sfml-graphics
+)

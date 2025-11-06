@@ -10,7 +10,7 @@ public:
     auto calculateComplexRoots() -> void;
     auto static convertHslToRgb(double h, double s, double v) -> sf::Color;
     auto assignColourToNewtonRoot() -> void;
-    auto findPixelColour(std::complex<double> z_start) -> sf::Color;
+    auto findPixelColour(std::complex<double> zStart) -> sf::Color;
     auto generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void;
 
     auto getSprite() -> sf::Sprite&;
