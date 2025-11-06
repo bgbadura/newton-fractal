@@ -33,11 +33,11 @@ auto NewtonFractal::convertHslToRgb(double h, double s, double v) -> sf::Color {
 
     auto c = v * s;
     auto hPrim = h / 60.0;
-    auto x = c * (1 - abs((int)hPrim % 2 - 1));
+    auto x = c * (1 - abs(static_cast<int>(hPrim) % 2 - 1));
 
-    auto r = 0;
-    auto g = 0;
-    auto b = 0;
+    auto r = 0.0;
+    auto g = 0.0;
+    auto b = 0.0;
 
     if (hPrim >= 0 && hPrim < 1)      { r = c; g = x; b = 0; }
     else if (hPrim >= 1 && hPrim < 2) { r = x; g = c; b = 0; }
@@ -50,9 +50,9 @@ auto NewtonFractal::convertHslToRgb(double h, double s, double v) -> sf::Color {
 
     // final RGB result (scaled from [0;1] to [0;255]
     return sf::Color(
-        (int)((r + m) * 255),
-        (int)((g + m) * 255),
-        (int)((b + m) * 255)
+        static_cast<int>((r + m) * 255),
+        static_cast<int>((g + m) * 255),
+        static_cast<int>((b + m) * 255)
     );
 }
 
@@ -60,41 +60,60 @@ auto NewtonFractal::assignColourToNewtonRoot() -> void {
     rootColours.clear();
 
     for (int i = 0; i < roots.size(); i++) {
-        auto hue = i * 360.0 / roots.size();
+        auto hue = i * 360.0 / static_cast<double>(roots.size());
         auto convertedColour = convertHslToRgb(hue, 1.0, 1.0);
 
         rootColours.push_back(convertedColour);
 
         std::cout << "Root " << i << " (Hue: " << hue << ") -> RGB: "
-            << (int)convertedColour.r << "; " << (int)convertedColour.g << "; " << (int)convertedColour.b << '\n';
+            << static_cast<int>(convertedColour.r) << "; "
+            << static_cast<int>(convertedColour.g) << "; "
+            << static_cast<int>(convertedColour.b) << '\n';
     }
 }
 
-auto NewtonFractal::iterate(std::complex<double> z_start) -> sf::Color {
+auto NewtonFractal::findPixelColour(std::complex<double> z_start) -> sf::Color {
     // Newton's fractal formula:    z_{k+1} = z_k - [ f(z_k) / f'(z_k) ]
     // value at point z:            f(z) = z^n - 1
     // derivative at point z:       f'(z) = n * z^(n-1)
-    auto newComplex = z - ((pow(z, n)-1.0) / (static_cast<double>(n) * pow(z, n-1)));
 
-    // for each equation root check if the new complex number is close to it; if yes, then colour it appropriately
-    // and stop iterating. If after a set number of iterations the number still doesn't approach some root,
-    // paint the pixel black
-    for (auto & r : roots) {
-        auto distance =sqrt(pow(newComplex.real()-r.real(), 2) + (pow(newComplex.imag() - r.imag(),2)));
-        if (distance < DELTA) {
-            // paint the pixel
-            // image.setPixel(x, y, sf::Color())
+    // temporary value (copy)
+    auto z = z_start;
+
+    for (int i = 0; i < MAX_ITER; i++) {
+        auto z_next = z - ((pow(z, n)-1.0) / (static_cast<double>(n) * pow(z, n-1)));
+
+        // for each equation root check if the new complex number is close to it; if yes, then colour it appropriately
+        // and stop iterating. If after a set number of iterations the number still doesn't approach some root,
+        // paint the pixel black
+        for (auto k = 0; k < roots.size(); k++) {
+            // auto distance = sqrt(pow(z_next.real()-r.real(), 2) + (pow(z_next.imag() - r.imag(),2)));
+            auto distance = std::abs(z_next - roots[k]);
+
+            if (distance < DELTA) {
+                // "the color of the point is determined by which root is reached (hue),
+                // and how many iterations it took (brightness)" - brightness is "value" in HSV
+                auto v = (1.0 - static_cast<double>(i) / MAX_ITER) * 0.9;
+                auto baseHue = rootColours[k]; // base colour of the closest root
+                return convertHslToRgb(baseHue, 1.0, v);
+            }
         }
+
+        // check if z is stuck in one place (for optimization)
+        if (std::abs(z_next - z) < 1e-8) {
+            return sf::Color::Black;
+        }
+
+        z = z_next;
     }
-    // placeholder
-    return {0.0, 0.0};
+
+    // when no root is reached within MAX_ITER number of iterations
+    return sf::Color::Black;
 }
 
-auto NewtonFractal::generateFractal(double WINDOW_WIDTH, double WINDOW_HEIGHT) -> void {
+auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void {
     // load an initial color (for testing) - works!
-    image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color(255, 0, 0));
-    texture.loadFromImage(image);
-    sprite.setTexture(texture);
+    image.create(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     std::cout << "Complex plane: from " << MIN_RE << ";" << MIN_IM << " to " << MAX_RE << ";" << MAX_IM << '\n';
 
@@ -103,15 +122,20 @@ auto NewtonFractal::generateFractal(double WINDOW_WIDTH, double WINDOW_HEIGHT) -
         for (int x = 0; x < image.getSize().x; x++) {
             // map a pixel (x,y) to a complex number: reZ and imZ
             auto complex = std::complex<double>(
-                MIN_RE + ((x / WINDOW_WIDTH) * (MAX_RE-MIN_RE)),
-                MAX_IM - ((y / WINDOW_HEIGHT) * (MAX_IM-MIN_IM))
+                MIN_RE + ((static_cast<double>(x) / WINDOW_WIDTH) * (MAX_RE-MIN_RE)),
+                MAX_IM - ((static_cast<double>(y) / WINDOW_HEIGHT) * (MAX_IM-MIN_IM))
             );
             std::cout<< "Complex number for pixel (" << x << "; " << y << ") is "
                 << complex.real() << " ; " << complex.imag() << "i\n";
 
-            // iterate the complex number through the task formula: z^n - 1 = 0
+
+            sf::Color pixelColour = findPixelColour(complex);
+            image.setPixel(x, y, pixelColour);
         }
     }
+
+    texture.loadFromImage(image);
+    sprite.setTexture(texture);
 }
 
 
