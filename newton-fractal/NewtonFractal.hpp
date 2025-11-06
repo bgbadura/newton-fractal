@@ -8,7 +8,7 @@ public:
     explicit NewtonFractal(int n);
 
     auto calculateComplexRoots() -> void;
-    auto convertHslToRgb(double h, double s, double v) -> sf::Color;
+    auto static convertHslToRgb(double h, double s, double v) -> sf::Color;
     auto assignColourToNewtonRoot() -> void;
     auto findPixelColour(std::complex<double> z_start) -> sf::Color;
     auto generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void;
@@ -38,7 +38,7 @@ private:
     std::complex<double> z;
 
     // limit of iterations
-    int MAX_ITER = 50;
+    int MAX_ITER = 25;
 
     // roots of the equation z^n - 1 = 0:
     std::vector<std::complex<double>> roots;

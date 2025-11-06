@@ -9,6 +9,11 @@ NewtonFractal::NewtonFractal(int n) : n(n) {}
 // fractal equation: z^n - 1 = 0
 
 auto NewtonFractal::calculateComplexRoots() -> void {
+    if (n <= 0) {
+        std::cout << "Incorrect value of n. Setting n to the default value of 3.\n";
+        n = 3;
+    }
+
     // the number of roots in this equation is equal to the value of parameter n
     for (int k = 0; k < n; k++) {
         std::complex<double> root = std::complex<double>(
@@ -33,7 +38,7 @@ auto NewtonFractal::convertHslToRgb(double h, double s, double v) -> sf::Color {
 
     auto c = v * s;
     auto hPrim = h / 60.0;
-    auto x = c * (1 - abs(static_cast<int>(hPrim) % 2 - 1));
+    auto x = c * (1 - std::abs(std::fmod(hPrim, 2.0) - 1.0));
 
     auto r = 0.0;
     auto g = 0.0;
