@@ -1,6 +1,6 @@
 #include "NewtonFractal.hpp"
 #include "SFML/Graphics.hpp"
-// #include "fractal_ispc.hpp"
+#include "fractal_ispc.h"
 #include <complex>
 #include <cmath>
 #include <numbers>
@@ -31,13 +31,12 @@ auto NewtonFractal::calculateComplexRoots() -> void {
 }
 
 auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void {
-
     // Uint8 buffer instead of sf::Image, because ISPC doesn't have the sf::Image type
     // and a buffer can be read by sf::Image easily
     // 4 bytes per pixel: RGBA (A for possible compatibility issues with SFML)
     std::vector<sf::Uint8> pixelBuffer(WINDOW_WIDTH * WINDOW_HEIGHT * 4);
 
-    // array of roots in C (again, for ISPC to undertand)
+    // array of roots in C (again, for ISPC to understand)
     std::vector<ComplexC> rootsCArray;
     rootsCArray.reserve(roots.size());
     for (const auto& r : roots) {
@@ -51,7 +50,7 @@ auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void
         n,
         MAX_ITER,
         DELTA,
-        rootsCArray.data(),
+        (const ispc::ComplexC*)rootsCArray.data(),
         pixelBuffer.data()
     );
 
@@ -60,11 +59,6 @@ auto NewtonFractal::generateFractal(int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void
     sprite.setTexture(texture);
 }
 
-
 auto NewtonFractal::getSprite() -> sf::Sprite& {
     return sprite;
-}
-
-auto NewtonFractal::getImage() -> sf::Image& {
-    return image;
 }
