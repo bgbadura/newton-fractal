@@ -7,7 +7,7 @@ auto drawWindow(int n, int WINDOW_WIDTH, int WINDOW_HEIGHT) -> void {
                            WINDOW_HEIGHT),
             "Newton Fractal",
             sf::Style::Default,
-            sf::ContextSettings(0, 0, 8)
+            sf::ContextSettings(16, 0, 4)
     );
     window.setFramerateLimit(60);
 
